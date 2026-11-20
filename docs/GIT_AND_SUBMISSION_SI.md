@@ -26,6 +26,8 @@ git remote -v
 
 Remote එකක් තවම නැහැ. ඔයාගේ actual repository URL එක දාලා:
 
+Preparation එකේ local author setting එක ZIP එකෙන් ඉවත් කරලා තියෙන නිසා ඔයාගේ computer එකේ Git identity එක භාවිතා වෙනවා. `git config --get user.name` සහ `git config --get user.email` වලින් බලන්න. ඒවා සකස් කරලා නැත්නම් ඔයාගේ නම සහ Git account එකේ email එක local repo එකට configure කරලා පස්සේ own commits කරන්න.
+
 ```powershell
 git remote add origin YOUR_REPOSITORY_URL
 git push -u origin main

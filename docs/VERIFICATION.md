@@ -15,6 +15,7 @@ Prepared on **20 November 2026**.
 | Empty title, ordering and exact 5 m/s boundary | Passed |
 | HTTP JSON mapping, unexpected units and failed responses | Passed with controlled HTTP responses |
 | Live Open-Meteo request through the app's C# weather service | Passed; temperature and wind deserialized successfully with the expected units |
+| Fresh source copy with all bin/obj folders removed | Restored successfully; all 42 tests passed and MAUI Android rebuilt with 0 warnings/errors |
 
 Build tools used: .NET SDK 9.0.321; MAUI Controls 9.0.120; EF Core SQLite 9.0.10; CommunityToolkit.Mvvm 8.4.0. Tests use xUnit 2.9.3.
 
