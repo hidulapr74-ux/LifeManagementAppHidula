@@ -1,3 +1,4 @@
+// AI-assisted tests; see README.md (AI use).
 using LifeManagementApp.Core.Services;
 
 namespace LifeManagementApp.Tests.Fakes;

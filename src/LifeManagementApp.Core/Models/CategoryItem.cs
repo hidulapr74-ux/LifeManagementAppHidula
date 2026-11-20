@@ -1,3 +1,4 @@
+// AI-assisted code for the course project; see README.md (AI use).
 namespace LifeManagementApp.Core.Models;
 
 public class CategoryItem
