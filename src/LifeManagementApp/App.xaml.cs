@@ -1,14 +1,26 @@
-﻿namespace LifeManagementApp;
+// AI-assisted code for the course project; see README.md (AI use).
+namespace LifeManagementApp;
 
 public partial class App : Application
 {
-	public App()
-	{
-		InitializeComponent();
-	}
+    private readonly AppShell shell;
 
-	protected override Window CreateWindow(IActivationState? activationState)
-	{
-		return new Window(new AppShell());
-	}
+    public App(AppShell shell)
+    {
+        InitializeComponent();
+        this.shell = shell;
+        UserAppTheme = AppTheme.Light;
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        var window = new Window(shell) { Title = "Life Management" };
+#if WINDOWS
+        window.Width = 1080;
+        window.Height = 840;
+        window.MinimumWidth = 390;
+        window.MinimumHeight = 640;
+#endif
+        return window;
+    }
 }
