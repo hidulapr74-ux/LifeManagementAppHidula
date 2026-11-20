@@ -1,3 +1,4 @@
+// AI-assisted tests; see README.md (AI use).
 using System.Net;
 using System.Text;
 using System.Text.Json;

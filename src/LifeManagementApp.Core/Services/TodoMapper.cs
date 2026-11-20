@@ -1,3 +1,4 @@
+// AI-assisted code for the course project; see README.md (AI use).
 using LifeManagementApp.Core.Models;
 using LifeManagementApp.Data.Entities;
 

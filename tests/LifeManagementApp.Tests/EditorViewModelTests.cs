@@ -1,3 +1,4 @@
+// AI-assisted tests; see README.md (AI use).
 using LifeManagementApp.Core.Models;
 using LifeManagementApp.Core.ViewModels;
 using LifeManagementApp.Tests.Fakes;

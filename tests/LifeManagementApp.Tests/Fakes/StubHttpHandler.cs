@@ -1,3 +1,4 @@
+// AI-assisted tests; see README.md (AI use).
 namespace LifeManagementApp.Tests.Fakes;
 
 public class StubHttpHandler : HttpMessageHandler

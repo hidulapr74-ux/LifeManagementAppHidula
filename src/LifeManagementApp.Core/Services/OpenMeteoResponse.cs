@@ -1,3 +1,4 @@
+// AI-assisted code for the course project; see README.md (AI use).
 using System.Text.Json.Serialization;
 
 namespace LifeManagementApp.Core.Services;
