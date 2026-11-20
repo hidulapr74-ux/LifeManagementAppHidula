@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LifeManagementApp.Core.ViewModels;assembly=LifeManagementApp.Core"
+             xmlns:models="clr-namespace:LifeManagementApp.Core.Models;assembly=LifeManagementApp.Core"
+             x:Class="LifeManagementApp.Views.TodoListPage" x:DataType="vm:TodoListViewModel"
+             Shell.NavBarIsVisible="False" Title="My tasks">
+    <Grid Padding="24,22,24,10" RowDefinitions="Auto,Auto,Auto,*" RowSpacing="14">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="A LITTLE MORE ORGANISED" Style="{StaticResource Eyebrow}" />
+                <Label Text="My tasks" Style="{StaticResource PageHeading}" />
+                <Label Text="{Binding CountLabel}" TextColor="{StaticResource Muted}" FontSize="12" />
+            </VerticalStackLayout>
+            <Button Grid.Column="1" Text="+ New task" Command="{Binding AddTodoCommand}" VerticalOptions="Center" />
+        </Grid>
+
+        <Border Grid.Row="1" Style="{StaticResource Card}" Padding="14,10" IsEnabled="{Binding IsNotBusy}">
+            <VerticalStackLayout Spacing="8">
+                <SearchBar Text="{Binding SearchText}" Placeholder="Find a task..." FontSize="14" TextColor="{StaticResource Ink}" CancelButtonColor="{StaticResource Primary}" />
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="8">
+                    <VerticalStackLayout Spacing="1"><Label Text="SORT BY" Style="{StaticResource Eyebrow}" /><Picker Title="Sort order" ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSort}" /></VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1" Spacing="1"><Label Text="SHOW" Style="{StaticResource Eyebrow}" /><Picker Title="Task status" ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding SelectedStatus}" /></VerticalStackLayout>
+                    <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="1"><Label Text="CATEGORY" Style="{StaticResource Eyebrow}" /><Picker Title="Category" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" /></VerticalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <VerticalStackLayout Grid.Row="2" Spacing="6">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                <Label Text="{Binding Feedback}" TextColor="{StaticResource Primary}" VerticalOptions="Center" FontSize="12" />
+                <ActivityIndicator Grid.Column="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Primary}" WidthRequest="24" />
+                <Button Grid.Column="2" Text="Refresh" Command="{Binding LoadCommand}" Style="{StaticResource GhostButton}" />
+            </Grid>
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" TextColor="{StaticResource Error}" />
+        </VerticalStackLayout>
+
+        <CollectionView Grid.Row="3" ItemsSource="{Binding Todos}" SelectionMode="None" IsEnabled="{Binding IsNotBusy}">
+            <CollectionView.ItemsLayout><LinearItemsLayout Orientation="Vertical" ItemSpacing="10" /></CollectionView.ItemsLayout>
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="20,34" Spacing="8" HorizontalOptions="Center">
+                    <Label Text="Nothing on this list yet." FontSize="18" FontFamily="OpenSansSemibold" HorizontalTextAlignment="Center" />
+                    <Label Text="Add a task, or try another search or filter." TextColor="{StaticResource Muted}" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:TodoItem">
+                    <Border Style="{StaticResource Card}" Padding="17" Margin="0,0,0,2">
+                        <VerticalStackLayout Spacing="10">
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                <Label Text="{Binding Title}" FontFamily="OpenSansSemibold" FontSize="17">
+                                    <Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding IsDone}" Value="True"><Setter Property="TextDecorations" Value="Strikethrough" /><Setter Property="TextColor" Value="{StaticResource Muted}" /></DataTrigger></Label.Triggers>
+                                </Label>
+                                <Label Grid.Column="1" Text="{Binding Priority, StringFormat='P{0}'}" TextColor="{Binding Priority, Converter={StaticResource PriorityColor}}" FontFamily="OpenSansSemibold" />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                <Label Text="{Binding CategoryName}" TextColor="{StaticResource Muted}" FontSize="12" />
+                                <Label Grid.Column="1" Text="{Binding DueDate, StringFormat='Due {0:dd MMM yyyy}'}" TextColor="{StaticResource Muted}" FontSize="12" />
+                            </Grid>
+                            <HorizontalStackLayout Spacing="8">
+                                <Button Text="{Binding IsDone, Converter={StaticResource DoneAction}}" Style="{StaticResource SoftButton}" Command="{Binding ToggleDoneCommand, Source={RelativeSource AncestorType={x:Type vm:TodoListViewModel}}, x:DataType=vm:TodoListViewModel}" CommandParameter="{Binding .}" />
+                                <Button Text="Edit" Style="{StaticResource GhostButton}" Command="{Binding EditCommand, Source={RelativeSource AncestorType={x:Type vm:TodoListViewModel}}, x:DataType=vm:TodoListViewModel}" CommandParameter="{Binding .}" />
+                                <Button Text="Delete" Style="{StaticResource DeleteButton}" Command="{Binding DeleteCommand, Source={RelativeSource AncestorType={x:Type vm:TodoListViewModel}}, x:DataType=vm:TodoListViewModel}" CommandParameter="{Binding .}" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

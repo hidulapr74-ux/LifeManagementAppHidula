@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LifeManagementApp.Core.ViewModels;assembly=LifeManagementApp.Core"
+             x:Class="LifeManagementApp.Views.AddTodoPage" x:DataType="vm:AddTodoViewModel" Title="Task details">
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="18" MaximumWidthRequest="820">
+            <Label Text="ONE THING AT A TIME" Style="{StaticResource Eyebrow}" />
+            <Label Text="{Binding PageTitle}" Style="{StaticResource PageHeading}" />
+            <Label Text="Give it a name, a little priority, and a day to do it." TextColor="{StaticResource Muted}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Primary}" />
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" TextColor="{StaticResource Error}" />
+            <Border Style="{StaticResource Card}" IsEnabled="{Binding IsNotBusy}">
+                <VerticalStackLayout Spacing="18">
+                    <VerticalStackLayout Spacing="6">
+                        <Grid ColumnDefinitions="*,Auto"><Label Text="Task title" FontFamily="OpenSansSemibold" /><Label Grid.Column="1" Text="{Binding TitleCounter}" FontSize="12" TextColor="{StaticResource Muted}" /></Grid>
+                        <Entry Text="{Binding Title}" Placeholder="e.g. Prepare my project demo" MaxLength="40" ReturnType="Done" ReturnCommand="{Binding SaveCommand}" />
+                        <Label Text="Required. Spaces alone aren't a title." FontSize="12" TextColor="{StaticResource Muted}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="6"><Label Text="Category" FontFamily="OpenSansSemibold" /><Picker Title="Choose a category" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" /></VerticalStackLayout>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="18">
+                        <VerticalStackLayout Spacing="6"><Label Text="Priority" FontFamily="OpenSansSemibold" /><Picker Title="Priority" ItemsSource="{Binding Priorities}" SelectedItem="{Binding Priority}" /><Label Text="5 is the highest" FontSize="12" TextColor="{StaticResource Muted}" /></VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="6"><Label Text="Due date" FontFamily="OpenSansSemibold" /><DatePicker Date="{Binding DueDate}" Format="dd MMM yyyy" /></VerticalStackLayout>
+                    </Grid>
+                    <VerticalStackLayout Spacing="6"><Label Text="Notes (optional)" FontFamily="OpenSansSemibold" /><Editor Text="{Binding Notes}" Placeholder="Anything you'd like to remember..." MaxLength="1000" HeightRequest="120" /></VerticalStackLayout>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Button Text="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SoftButton}" />
+                        <Button Grid.Column="1" Text="{Binding SaveLabel}" Command="{Binding SaveCommand}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+            <Label Text="Your tasks are saved on this device." TextColor="{StaticResource Muted}" FontSize="12" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

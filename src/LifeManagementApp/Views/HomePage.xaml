@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LifeManagementApp.Core.ViewModels;assembly=LifeManagementApp.Core"
+             xmlns:models="clr-namespace:LifeManagementApp.Core.Models;assembly=LifeManagementApp.Core"
+             x:Class="LifeManagementApp.Views.HomePage" x:DataType="vm:HomeViewModel"
+             Shell.NavBarIsVisible="False" Title="Today">
+    <ScrollView>
+        <VerticalStackLayout Padding="24,22" Spacing="20" MaximumWidthRequest="1080">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="LIFE MANAGEMENT" Style="{StaticResource Eyebrow}" />
+                    <Label Text="Today, made simple." Style="{StaticResource PageHeading}" />
+                    <Label Text="{Binding TodayLabel}" TextColor="{StaticResource Muted}" />
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="+ New task" Command="{Binding AddTodoCommand}" VerticalOptions="Center" />
+            </Grid>
+
+            <Border Style="{StaticResource Card}" BackgroundColor="{StaticResource DeepTeal}" Stroke="{StaticResource DeepTeal}" Padding="22">
+                <VerticalStackLayout Spacing="14">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="A LOOK OUTSIDE" Style="{StaticResource Eyebrow}" TextColor="#A7C9BF" />
+                            <Label Text="Vaasa, Finland" FontSize="18" FontFamily="OpenSansSemibold" TextColor="White" />
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1" Text="Refresh" Command="{Binding RefreshWeatherCommand}" Style="{StaticResource SoftButton}" />
+                    </Grid>
+                    <ActivityIndicator IsVisible="{Binding IsWeatherLoading}" IsRunning="{Binding IsWeatherLoading}" Color="#B8DFCC" HeightRequest="24" />
+                    <Grid IsVisible="{Binding HasWeather}" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="18">
+                        <Image Source="breeze.png" WidthRequest="66" HeightRequest="70" VerticalOptions="Center" />
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                            <Label Text="{Binding Weather.TemperatureCelsius, StringFormat='{0:0.#}°C'}" FontSize="36" FontFamily="OpenSansSemibold" TextColor="White" />
+                            <Label Text="Current temperature" TextColor="#BCD4CC" FontSize="12" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
+                            <Label Text="{Binding Weather.WindSpeedMetersPerSecond, StringFormat='{0:0.#} m/s'}" FontSize="20" FontFamily="OpenSansSemibold" TextColor="White" />
+                            <Label Text="Wind speed" TextColor="#BCD4CC" FontSize="12" />
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Border IsVisible="{Binding HasWeather}" BackgroundColor="#20575A" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="14">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="{Binding KiteHeadline}" TextColor="White" FontFamily="OpenSansSemibold" FontSize="16" />
+                            <Label Text="{Binding KiteDescription}" TextColor="#CCE0D4" FontSize="12" />
+                        </VerticalStackLayout>
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding Weather.IsKitesurfWeather}" Value="True">
+                                <Setter Property="BackgroundColor" Value="#326F54" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                    </Border>
+                    <Label IsVisible="{Binding HasWeatherError}" Text="{Binding WeatherError}" TextColor="#FFE3CA" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Weather data: Open-Meteo" TextColor="#A7C9BF" FontSize="11" />
+                        <Label Grid.Column="1" IsVisible="{Binding HasWeather}" Text="{Binding Weather.RetrievedAt, StringFormat='Updated {0:HH:mm}'}" TextColor="#A7C9BF" FontSize="11" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <Border Style="{StaticResource Card}" Padding="14">
+                    <VerticalStackLayout Spacing="4"><Label Text="{Binding OpenCount}" FontSize="29" FontFamily="OpenSansSemibold" /><Label Text="Open tasks" FontSize="12" TextColor="{StaticResource Muted}" /></VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource Card}" Padding="14">
+                    <VerticalStackLayout Spacing="4"><Label Text="{Binding DueTodayCount}" FontSize="29" FontFamily="OpenSansSemibold" /><Label Text="Due today" FontSize="12" TextColor="{StaticResource Muted}" /></VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource Card}" Padding="14">
+                    <VerticalStackLayout Spacing="4"><Label Text="{Binding DoneCount}" FontSize="29" FontFamily="OpenSansSemibold" /><Label Text="Completed" FontSize="12" TextColor="{StaticResource Muted}" /></VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Your next three" Style="{StaticResource SectionHeading}" />
+                    <Label Text="The important things, in the right order." TextColor="{StaticResource Muted}" FontSize="12" />
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="View all" Command="{Binding OpenTodosCommand}" Style="{StaticResource GhostButton}" />
+            </Grid>
+
+            <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding TopTodos}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="models:TodoItem">
+                        <Border Style="{StaticResource Card}" Padding="17">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="6">
+                                <Label Text="{Binding Title}" FontFamily="OpenSansSemibold" FontSize="16" />
+                                <Label Grid.Column="1" Text="{Binding Priority, StringFormat='P{0}'}" TextColor="{Binding Priority, Converter={StaticResource PriorityColor}}" FontFamily="OpenSansSemibold" />
+                                <Label Grid.Row="1" Text="{Binding CategoryName}" FontSize="12" TextColor="{StaticResource Muted}" />
+                                <Label Grid.Row="1" Grid.Column="1" Text="{Binding DueDate, StringFormat='{0:dd MMM}'}" FontSize="12" TextColor="{StaticResource Muted}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+                <BindableLayout.EmptyView>
+                    <Border Style="{StaticResource Card}">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="A little breathing room." FontFamily="OpenSansSemibold" FontSize="18" />
+                            <Label Text="No open tasks. Add something you want to make time for." TextColor="{StaticResource Muted}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </BindableLayout.EmptyView>
+            </VerticalStackLayout>
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" TextColor="{StaticResource Error}" />
+            <Button Text="Refresh today" Command="{Binding LoadCommand}" Style="{StaticResource GhostButton}" HorizontalOptions="Start" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
