@@ -29,6 +29,10 @@ The portable tests are network-independent. They exercise the same Core and Data
 
 ## Platform limits
 
+### Startup correction, 21 November 2026
+
+The first Windows launch paused while loading AppShell XAML. Source inspection identified an initialization-order bug: injecting AppShell into App's constructor creates the shell before App.xaml resources exist. App now injects IServiceProvider and resolves AppShell in CreateWindow, after InitializeComponent has loaded those resources. This follows the [documented MAUI XAML-resource limitation](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/dependency-injection#limitations-with-xaml-resources). The corrected source passed a new MAUI Android build with zero warnings and zero errors; Windows launch verification is still pending on the student's machine. The screenshot did not include the exception message, so any further launch exception must be checked using its actual message.
+
 The preparation environment runs Linux. The Windows executable and native UI have **not** been run here. The Android project has been compiled, but an interactive device/emulator session has not been used. A successful build checks source/XAML correctness; it does not prove native layout, Shell navigation or every device interaction at runtime.
 
 ## Finish these checks on the presentation laptop

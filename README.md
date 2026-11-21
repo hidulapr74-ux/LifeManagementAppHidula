@@ -70,6 +70,8 @@ Read the generated migration, then start the app; its `DatabaseInitializer` appl
 
 The database class library follows the instructor's database guide. The additional Core library lets the same ViewModel and service code run in xUnit without starting MAUI. It is client-side application logic, not a web server.
 
+At startup, `App` receives `IServiceProvider`, loads `App.xaml` resources, and resolves `AppShell` in `CreateWindow`. The shell must be created after the shared resource dictionaries, because its XAML uses their colours and styles.
+
 Pages bind to a ViewModel. A ViewModel asks an interface for data. `TodoRepository` maps the screen's `TodoItem` to the database's `TodoEntity` and calls `TodoDataService`. ViewModels do not reference controls, EF Core or DbContext.
 
 ```mermaid

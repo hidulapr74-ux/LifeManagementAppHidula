@@ -1,19 +1,24 @@
 // AI-assisted code for the course project; see README.md (AI use).
+using Microsoft.Extensions.DependencyInjection;
+
 namespace LifeManagementApp;
 
 public partial class App : Application
 {
-    private readonly AppShell shell;
+    private readonly IServiceProvider services;
 
-    public App(AppShell shell)
+    public App(IServiceProvider services)
     {
         InitializeComponent();
-        this.shell = shell;
+        this.services = services;
         UserAppTheme = AppTheme.Light;
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
+        // Resolve the shell after App.xaml has loaded its shared colours/styles.
+        // Injecting AppShell into App's constructor creates it too early.
+        AppShell shell = services.GetRequiredService<AppShell>();
         var window = new Window(shell) { Title = "Life Management" };
 #if WINDOWS
         window.Width = 1080;
